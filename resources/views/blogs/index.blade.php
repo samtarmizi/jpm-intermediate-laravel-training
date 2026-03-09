@@ -21,7 +21,10 @@
                                 <tr>
                                     <td>{{ $blog->title }}</td>
                                     <td>{{ $blog->content }}</td>
-                                    <td></td>
+                                    <td>
+                                        <a href="{{ route('blogs.show', $blog->id) }}" class="btn btn-primary">{{ __('Show') }}</a>
+                                        <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-success">{{ __('Edit') }}</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

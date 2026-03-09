@@ -45,4 +45,13 @@ class BlogController extends Controller
         $blog = \App\Models\Blog::find($id);
         return view('blogs.edit', compact('blog')); // resources/views/blogs/edit.blade.php + $blog
     }
+
+    public function update(Request $request, $id)
+    {
+        $blog = \App\Models\Blog::find($id);
+        $blog->title = $request->title;
+        $blog->content = $request->content;
+        $blog->save();
+        return redirect()->route('blogs.index');
+    }
 }
