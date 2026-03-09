@@ -24,6 +24,15 @@
                                     <td>
                                         <a href="{{ route('blogs.show', $blog->id) }}" class="btn btn-primary">{{ __('Show') }}</a>
                                         <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-success">{{ __('Edit') }}</a>
+                                        <form action="{{ route('blogs.destroy', $blog->id) }}" 
+                                            method="POST" 
+                                            onclick="return confirm('{{ __('Are you sure you want to delete this blog?') }}')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">
+                                                {{ __('Delete') }}
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

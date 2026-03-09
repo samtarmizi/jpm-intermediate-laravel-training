@@ -54,4 +54,11 @@ class BlogController extends Controller
         $blog->save();
         return redirect()->route('blogs.index');
     }
+
+    public function destroy($id)
+    {
+        $blog = \App\Models\Blog::find($id);
+        $blog->delete();
+        return redirect()->route('blogs.index');
+    }
 }
