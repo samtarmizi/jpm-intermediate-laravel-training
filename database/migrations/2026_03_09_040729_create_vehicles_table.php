@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('year');
             $table->string('brand');
             $table->string('model');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

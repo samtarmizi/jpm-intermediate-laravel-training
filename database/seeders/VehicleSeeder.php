@@ -20,6 +20,7 @@ class VehicleSeeder extends Seeder
             'year' => 2024,
             'brand' => 'Toyota',
             'model' => 'Corolla',
+            'user_id' => 1,
         ]);
     }
 }

@@ -18,11 +18,12 @@ class VehicleFactory extends Factory
     {
         return [
             'name' => 'My Dream Car '. fake()->unique()->word(),
-            'plate_number' => fake()->randomNumber(8),
+            'plate_number' => fake()->regexify('[A-Z]{3}[0-9]{4}'),
             'color' => fake()->colorName(),
             'year' => fake()->year(),
             'brand' => fake()->company(),
             'model' => fake()->word(),
+            'user_id' => \App\Models\User::factory(),
         ];
     }
 }
