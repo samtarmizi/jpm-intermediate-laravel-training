@@ -14,7 +14,7 @@
                     </div>
                     <div class="form-group">
                         <label for="content">{{ __('Content') }}</label>
-                        <textarea class="form-control" name="content" required>{{ $blog->content }}</textarea>
+                        <textarea class="form-control" name="content" readonly>{{ $blog->content }}</textarea>
                     </div>
                 </div>
             </div>

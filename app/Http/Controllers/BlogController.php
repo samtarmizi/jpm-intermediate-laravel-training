@@ -39,4 +39,10 @@ class BlogController extends Controller
         $blog = \App\Models\Blog::find($id);
         return view('blogs.show', compact('blog')); // resources/views/blogs/show.blade.php + $blog
     }
+
+    public function edit($id)
+    {
+        $blog = \App\Models\Blog::find($id);
+        return view('blogs.edit', compact('blog')); // resources/views/blogs/edit.blade.php + $blog
+    }
 }
