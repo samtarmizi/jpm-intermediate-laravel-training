@@ -33,4 +33,10 @@ class BlogController extends Controller
         $blog->save();
         return redirect()->route('blogs.index');
     }
+
+    public function show($id)
+    {
+        $blog = \App\Models\Blog::find($id);
+        return view('blogs.show', compact('blog')); // resources/views/blogs/show.blade.php + $blog
+    }
 }
