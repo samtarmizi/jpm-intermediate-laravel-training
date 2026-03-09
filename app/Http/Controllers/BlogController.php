@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreBlogRequest;
+use App\Http\Requests\UpdateBlogRequest;
+use App\Models\Blog;
 
 class BlogController extends Controller
 {
@@ -13,52 +15,53 @@ class BlogController extends Controller
 
     public function index()
     {
-        $blogs = \App\Models\Blog::all();
-        return view('blogs.index', compact('blogs')); // resources/views/blogs/index.blade.php + $blogs
+        $blogs = Blog::all();
+        return view('blogs.index', compact('blogs'));
     }
 
     public function create()
     {
-        return view('blogs.create'); // resources/views/blogs/create.blade.php
+        return view('blogs.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreBlogRequest $request)
     {
-        // POPO - Plain Old PHP Object
-        $blog = new \App\Models\Blog();
-
-        $blog->title = $request->title;
-        $blog->content = $request->content;
-        $blog->user_id = auth()->user()->id;
+        $blog = new Blog();
+        $blog->title = $request->validated('title');
+        $blog->content = $request->validated('content');
+        $blog->user_id = auth()->id();
         $blog->save();
+
         return redirect()->route('blogs.index');
     }
 
-    public function show($id)
+    public function show(string $id)
     {
-        $blog = \App\Models\Blog::find($id);
-        return view('blogs.show', compact('blog')); // resources/views/blogs/show.blade.php + $blog
+        $blog = Blog::findOrFail($id);
+        return view('blogs.show', compact('blog'));
     }
 
-    public function edit($id)
+    public function edit(string $id)
     {
-        $blog = \App\Models\Blog::find($id);
-        return view('blogs.edit', compact('blog')); // resources/views/blogs/edit.blade.php + $blog
+        $blog = Blog::findOrFail($id);
+        return view('blogs.edit', compact('blog'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateBlogRequest $request, string $id)
     {
-        $blog = \App\Models\Blog::find($id);
-        $blog->title = $request->title;
-        $blog->content = $request->content;
+        $blog = Blog::findOrFail($id);
+        $blog->title = $request->validated('title');
+        $blog->content = $request->validated('content');
         $blog->save();
+
         return redirect()->route('blogs.index');
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        $blog = \App\Models\Blog::find($id);
+        $blog = Blog::findOrFail($id);
         $blog->delete();
+
         return redirect()->route('blogs.index');
     }
 }
