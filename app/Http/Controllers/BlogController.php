@@ -2,63 +2,69 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\BlogService;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        protected BlogService $blogService
+    ) {
         $this->middleware('auth');
     }
 
     public function index()
     {
-        $blogs = \App\Models\Blog::all();
-        return view('blogs.index', compact('blogs')); // resources/views/blogs/index.blade.php + $blogs
+        $blogs = $this->blogService->getAllBlogs();
+        return view('blogs.index', compact('blogs'));
     }
 
     public function create()
     {
-        return view('blogs.create'); // resources/views/blogs/create.blade.php
+        return view('blogs.create');
     }
 
     public function store(Request $request)
     {
-        // POPO - Plain Old PHP Object
-        $blog = new \App\Models\Blog();
-
-        $blog->title = $request->title;
-        $blog->content = $request->content;
-        $blog->user_id = auth()->user()->id;
-        $blog->save();
+        $this->blogService->createBlog(
+            $request->only(['title', 'content']),
+            auth()->id()
+        );
         return redirect()->route('blogs.index');
     }
 
     public function show($id)
     {
-        $blog = \App\Models\Blog::find($id);
-        return view('blogs.show', compact('blog')); // resources/views/blogs/show.blade.php + $blog
+        $blog = $this->blogService->getBlogById((int) $id);
+        if (!$blog) {
+            abort(404);
+        }
+        return view('blogs.show', compact('blog'));
     }
 
     public function edit($id)
     {
-        $blog = \App\Models\Blog::find($id);
-        return view('blogs.edit', compact('blog')); // resources/views/blogs/edit.blade.php + $blog
+        $blog = $this->blogService->getBlogById((int) $id);
+        if (!$blog) {
+            abort(404);
+        }
+        return view('blogs.edit', compact('blog'));
     }
 
     public function update(Request $request, $id)
     {
-        $blog = \App\Models\Blog::find($id);
-        $blog->title = $request->title;
-        $blog->content = $request->content;
-        $blog->save();
+        $blog = $this->blogService->updateBlog((int) $id, $request->only(['title', 'content']));
+        if (!$blog) {
+            abort(404);
+        }
         return redirect()->route('blogs.index');
     }
 
     public function destroy($id)
     {
-        $blog = \App\Models\Blog::find($id);
-        $blog->delete();
+        if (!$this->blogService->deleteBlog((int) $id)) {
+            abort(404);
+        }
         return redirect()->route('blogs.index');
     }
 }
