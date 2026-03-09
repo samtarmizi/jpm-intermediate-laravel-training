@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Vehicle>
@@ -23,7 +24,9 @@ class VehicleFactory extends Factory
             'year' => fake()->year(),
             'brand' => fake()->company(),
             'model' => fake()->word(),
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => User::all()->count() > 0 ? 
+                User::all()->random()->id : 
+                User::factory()->create()->id,
         ];
     }
 }
