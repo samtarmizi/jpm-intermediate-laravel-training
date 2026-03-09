@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
@@ -30,6 +31,11 @@ class BlogController extends Controller
         $blog->title = $request->title;
         $blog->content = $request->content;
         $blog->user_id = auth()->user()->id;
+
+        if ($request->hasFile('attachment')) {
+            $blog->attachment = $request->file('attachment')->store('blog-attachments', 'public');
+        }
+
         $blog->save();
         return redirect()->route('blogs.index');
     }
@@ -51,6 +57,14 @@ class BlogController extends Controller
         $blog = \App\Models\Blog::find($id);
         $blog->title = $request->title;
         $blog->content = $request->content;
+
+        if ($request->hasFile('attachment')) {
+            if ($blog->attachment) {
+                Storage::disk('public')->delete($blog->attachment);
+            }
+            $blog->attachment = $request->file('attachment')->store('blog-attachments', 'public');
+        }
+
         $blog->save();
         return redirect()->route('blogs.index');
     }
@@ -58,6 +72,9 @@ class BlogController extends Controller
     public function destroy($id)
     {
         $blog = \App\Models\Blog::find($id);
+        if ($blog->attachment) {
+            Storage::disk('public')->delete($blog->attachment);
+        }
         $blog->delete();
         return redirect()->route('blogs.index');
     }

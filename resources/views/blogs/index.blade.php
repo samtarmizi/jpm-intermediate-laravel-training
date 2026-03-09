@@ -11,16 +11,26 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Content</th>
-                                <th>Action</th>
+                                <th>{{ __('Title') }}</th>
+                                <th>{{ __('Content') }}</th>
+                                <th>{{ __('Attachment') }}</th>
+                                <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($blogs as $blog)
                                 <tr>
                                     <td>{{ $blog->title }}</td>
-                                    <td>{{ $blog->content }}</td>
+                                    <td>{{ Str::limit($blog->content, 50) }}</td>
+                                    <td>
+                                        @if($blog->attachment)
+                                            <a href="{{ asset('storage/' . $blog->attachment) }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">
+                                                {{ __('View') }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <a href="{{ route('blogs.show', $blog->id) }}" class="btn btn-primary">{{ __('Show') }}</a>
                                         <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-success">{{ __('Edit') }}</a>
