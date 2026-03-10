@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Blogs Create') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('blogs.store') }}">
+                    <form method="POST" action="{{ route('blogs.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="title">{{ __('Title') }}</label>

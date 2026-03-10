@@ -69,7 +69,13 @@ class BlogController extends Controller
         $blog->title = $request->title;
         $blog->content = $request->content;
         $blog->user_id = auth()->user()->id;
+
+        if ($request->hasFile('attachment')) {
+            $blog->attachment = $request->file('attachment')->store('blog-attachments', 'public');
+        }
+
         $blog->save();
+
         return redirect()->route('blogs.index');
     }
 
