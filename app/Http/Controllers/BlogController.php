@@ -16,9 +16,42 @@ class BlogController extends Controller
         // $blogs = \App\Models\Blog::all();
 
         // query 'search' Blog::model
-        $blogs = \App\Models\Blog::where('title', 'LIKE', '%'.$request->search.'%')
-                    ->orWhere('content', 'LIKE', '%'.$request->search.'%')
-                    ->get();
+        // $blogs = \App\Models\Blog::where('title', 'LIKE', '%'.$request->search.'%')
+        //             ->orWhere('content', 'LIKE', '%'.$request->search.'%')
+        //             ->orderBy('created_at', 'desc')
+        //             ->get();
+
+        $query = \App\Models\Blog::query();
+
+        // Only add search conditions when the user has typed something in the search box
+        $query->when($request->filled('search'), function ($query) use ($request) {
+            $searchTerm = '%' . $request->search . '%';
+
+            if ($request->filter === 'title') {
+                $query->where('title', 'like', $searchTerm);
+            } elseif ($request->filter === 'content') {
+                $query->where('content', 'like', $searchTerm);
+            } else {
+                // Search in both title and content
+                $query->where(function ($query) use ($searchTerm) {
+                    $query->where('title', 'like', $searchTerm)
+                        ->orWhere('content', 'like', $searchTerm);
+                });
+            }
+        });
+
+        // Sort: only allow known columns to avoid SQL issues
+        $sortColumn = $request->get('sort_by', 'created_at');
+        $sortDirection = strtolower($request->get('sort_dir', 'desc')) === 'asc' ? 'asc' : 'desc';
+        $allowedSortColumns = ['title', 'created_at', 'updated_at'];
+
+        if (in_array($sortColumn, $allowedSortColumns)) {
+            $query->orderBy($sortColumn, $sortDirection);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $blogs = $query->get();
 
         return view('blogs.index', compact('blogs')); // resources/views/blogs/index.blade.php + $blogs
     }
