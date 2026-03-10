@@ -8,6 +8,11 @@
                 <div class="card-header">{{ __('Blogs Index') }}</div>
 
                 <div class="card-body">
+                    <form>
+                        <div class="">
+                            <input class type="text" name="search">
+                        </div>
+                    </form>
                     <table class="table">
                         <thead>
                             <tr>

@@ -11,9 +11,15 @@ class BlogController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = \App\Models\Blog::all();
+        // $blogs = \App\Models\Blog::all();
+
+        // query 'search' Blog::model
+        $blogs = \App\Models\Blog::where('title', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere('content', 'LIKE', '%'.$request->search.'%')
+                    ->get();
+
         return view('blogs.index', compact('blogs')); // resources/views/blogs/index.blade.php + $blogs
     }
 
