@@ -18,6 +18,10 @@
                             <label for="content">{{ __('Content') }}</label>
                             <textarea class="form-control" name="content" required></textarea>
                         </div>
+                        <div class="form-group mb-3">
+                            <label for="attachment">{{ __('Attachment') }}</label>
+                            <input type="file" class="form-control" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp">
+                        </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">{{ __('Create') }}</button>
                         </div>
