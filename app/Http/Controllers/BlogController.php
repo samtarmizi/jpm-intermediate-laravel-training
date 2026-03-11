@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Http\Requests\StoreBlogRequest;
 
 class BlogController extends Controller
 {
@@ -63,8 +64,8 @@ class BlogController extends Controller
         return view('blogs.create'); // resources/views/blogs/create.blade.php
     }
 
-    public function store(Request $request)
-    {
+    public function store(StoreBlogRequest $request)
+    {   
         // POPO - Plain Old PHP Object
         $blog = new \App\Models\Blog();
 
@@ -72,14 +73,14 @@ class BlogController extends Controller
         $blog->content = $request->content;
         $blog->user_id = auth()->user()->id;
 
-        if ($request->hasFile('attachment')) {
-            $file = $request->file('attachment');
-            $name = Str::random(40) . '.' . ($file->getClientOriginalExtension() ?: 'bin');
-            $path = Storage::disk('public')->putFileAs('blog-attachments', $file, $name);
-            if ($path !== false && $path !== '') {
-                $blog->attachment = $path;
-            }
-        }
+        // if ($request->hasFile('attachment')) {
+        //     $file = $request->file('attachment');
+        //     $name = Str::random(40) . '.' . ($file->getClientOriginalExtension() ?: 'bin');
+        //     $path = Storage::disk('public')->putFileAs('blog-attachments', $file, $name);
+        //     if ($path !== false && $path !== '') {
+        //         $blog->attachment = $path;
+        //     }
+        // }
 
         $blog->save();
 

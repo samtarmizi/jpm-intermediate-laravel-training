@@ -12,7 +12,10 @@
                         @csrf
                         <div class="form-group">
                             <label for="title">{{ __('Title') }}</label>
-                            <input type="text" class="form-control" name="title" required>
+                            <input type="text" class="form-control" name="title" value="{{ old('title') }}">
+                            @error('title')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="content">{{ __('Content') }}</label>
