@@ -53,6 +53,7 @@
                             <tr>
                                 <th>Title</th>
                                 <th>Content</th>
+                                <th>Author</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -61,6 +62,7 @@
                                 <tr>
                                     <td>{{ $blog->title }}</td>
                                     <td>{{ $blog->content }}</td>
+                                    <td>{{ $blog->user->name }}</td>
                                     <td>
                                         <a href="{{ route('blogs.show', $blog->id) }}" class="btn btn-primary">{{ __('Show') }}</a>
                                         <a href="{{ route('blogs.edit', $blog->id) }}" class="btn btn-success">{{ __('Edit') }}</a>

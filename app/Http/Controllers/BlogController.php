@@ -24,7 +24,9 @@ class BlogController extends Controller
         //             ->orderBy('created_at', 'desc')
         //             ->get();
 
-        $query = \App\Models\Blog::query();
+        // $query = \App\Models\Blog::query();
+        $user = auth()->user();
+        $query = $user->blogs();
 
         // Only add search conditions when the user has typed something in the search box
         $query->when($request->filled('search'), function ($query) use ($request) {
