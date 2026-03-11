@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
@@ -71,7 +73,12 @@ class BlogController extends Controller
         $blog->user_id = auth()->user()->id;
 
         if ($request->hasFile('attachment')) {
-            $blog->attachment = $request->file('attachment')->store('blog-attachments', 'public');
+            $file = $request->file('attachment');
+            $name = Str::random(40) . '.' . ($file->getClientOriginalExtension() ?: 'bin');
+            $path = Storage::disk('public')->putFileAs('blog-attachments', $file, $name);
+            if ($path !== false && $path !== '') {
+                $blog->attachment = $path;
+            }
         }
 
         $blog->save();
