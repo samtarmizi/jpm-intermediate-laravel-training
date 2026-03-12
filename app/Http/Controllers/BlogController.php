@@ -56,7 +56,7 @@ class BlogController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        $blogs = $query->get();
+        $blogs = $query->paginate(5);
 
         return view('blogs.index', compact('blogs')); // resources/views/blogs/index.blade.php + $blogs
     }
